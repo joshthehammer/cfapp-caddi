@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<style type="text/css">
+body {padding-top:2em;}
+</style>
+
+	<div id="header">
+		<div id="title" class="container"><h1>cADdi</h1></div>
+	</div>
+
+	<div id="content" class="container">
+		<p>
+		    <strong>Caddi enables a webmaster to display ads from various sources to monetize pages without ads.</strong>
+		</p>
+		<ul>
+		    <li>Show ads</li>
+		    <li>Create revenue</li>
+
+		</ul>
+		    <h2>Built on top of Cloudflare</h2>
+	    <p>
+	        Cloudflare enables one click install, and ensures safe delivery of the javascript
+	    </p>
+	</div>
+
+
+<script type="text/javascript"> var CloudFlare = CloudFlare || []; </script>
+<script type="text/javascript" src="//ajax.cloudflare.com/cdn-cgi/nexp/cloudflare.js" </script>
+<script type="text/javascript">
+
+    var caddiConfig = {
+        "message" : "hello world! sliding like air hockey", 
+    }
+
+    var a=window.CloudFlare;a.push({paths:{caddi:"//gleeco.com/js/caddi/"}});a.push(function(b,c){c("caddi/config",function(){return caddiConfig});b(["caddi"])});
+
+</script>

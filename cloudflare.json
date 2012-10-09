@@ -1,0 +1,56 @@
+{
+    "name": "Caddy",
+    "description": "This app lets you put a slider with an advertisement on your site's web pages.",
+    "keywords" : [
+        "monetization",
+        "ctr",
+        "ads"
+        ],
+    "version": "0.1.0",
+    "contributors": [
+    {
+        "name" : "gregory coleman",
+        "email" : "gleeco@cloudflare.com"
+    }
+    ],
+        "repository" : {
+            "type" : "git",
+            "url" : "https://github.com/gleecology/cfapp-caddi.git"
+        },
+        "main" : "./public/javascripts/caddi.js",
+        "dependencies" : {
+        },
+        "licenses" : [
+        {
+            "type": "MIT",
+            "url": "http://www.opensource.org/licenses/MIT"
+		}],
+        "implements" : "AMD",
+        "scripts" : {
+        },
+        "config" : {
+            "assets" : {
+                "logos" : {
+                    "200px": "./public/images/caddi_logo-200.png",
+                    "132px": "./public/images/caddi_logo-132.png"
+                },
+                "detail_page" : [
+                	"./public/images/caddi_screenshot.png"
+                ]
+            },
+            "payment": {},
+            "details": {
+               "Category": "Content Monetization",
+               "Language": "English",
+               "Restrictions": "Some"
+           },
+            "interface": [
+            {
+                "id": "message",
+                "name": "Display slider ad text",
+                "description": "The text you would like displayed on your site. Leave blank to disable.",
+                "type": "string"
+            }
+            ]
+        }
+}
