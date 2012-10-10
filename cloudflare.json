@@ -6,7 +6,7 @@
         "ctr",
         "ads"
         ],
-    "version": "0.1.0",
+    "version": "0.1.1",
     "contributors": [
     {
         "name" : "gregory coleman",
@@ -40,7 +40,7 @@
             },
             "payment": {},
             "details": {
-               "Category": "Content Monetization",
+               "Category": "advertising",
                "Language": "English",
                "Restrictions": "Some"
            },
