@@ -18,7 +18,7 @@ CloudFlare.define("caddi", ["caddi/config"], function(_config) {
     }
     
 
-    var Caddy = function Caddy(config) {
+    var Caddi = function Caddi(config) {
             this.caddiEl = null;
             this.useFilter = /msie [678]/i.test(navigator.userAgent); // sniff, sniff
             this.message_dismissed = "";
@@ -26,16 +26,16 @@ CloudFlare.define("caddi", ["caddi/config"], function(_config) {
             this.config = config
             this.cookie = "__caddiapp_dm"
         }
-    var caddi = new Caddy(_config)
+    var caddi = new Caddi(_config)
 
 
-    Caddy.prototype.activate = function() {
+    Caddi.prototype.activate = function() {
         if (this.config.message != "") {
             this.setup();
         }
     }
 
-    Caddy.prototype.setup = function() {
+    Caddi.prototype.setup = function() {
         var theme = document.createElement('style');
         theme.setAttribute("type", "text/css")
         var style = ".caddi { position: absolute; -moz-transition: all 0.6s ease-in-out; -webkit-transition: all 0.6s ease-in-out; -ms-transition: all 0.6s ease-in-out; -o-transition: all 0.6s ease-in-out; transition: all 0.6s ease-in-out; z-index: -1; font-family: Helvetica Neue, Helvetica, san-serif; font-size: 18px; top: -50px; left: 0; opacity: 0; filter: progid:dximagetransform.microsoft.alpha(Opacity=0); width: 100%; color: #DDD; padding: 5px 0; text-align: center; background-color: #333; border-bottom: 1px solid black; } .caddi.caddi-animate, .caddi.caddi-js-animate { z-index: 100000; top: 0px; } .caddi.caddi-animate { opacity: 1; filter: progid:dximagetransform.microsoft.alpha(Opacity=100); } .caddi.caddi-animate:hover { opacity: 0.7; filter: progid:dximagetransform.microsoft.alpha(Opacity=70); } .caddi.caddi-js-animate { opacity: 1; filter: progid:dximagetransform.microsoft.alpha(Opacity=100); } .caddi.caddi-js-animate:hover { opacity: 0.7; filter: progid:dximagetransform.microsoft.alpha(Opacity=70); } ";
@@ -71,7 +71,7 @@ CloudFlare.define("caddi", ["caddi/config"], function(_config) {
         this.showMessage();
 
     }
-    Caddy.prototype.showMessage = function(self) {
+    Caddi.prototype.showMessage = function(self) {
         if (this.message_dismissed != this.murmurhash3_32_gc(this.config.message, 1) + "") {
             this.caddiEl.innerHTML = this.config.message;
             this.animate(1);
@@ -80,7 +80,7 @@ CloudFlare.define("caddi", ["caddi/config"], function(_config) {
     }
         
 
-    Caddy.prototype.animate = function(level) {
+    Caddi.prototype.animate = function(level) {
         this.animate_status = level;
         if (level === 1) {
             this.caddiEl.className = "caddi caddi-animate";
@@ -91,7 +91,7 @@ CloudFlare.define("caddi", ["caddi/config"], function(_config) {
     }
 
     // if CSS Transitions not supported, fallback to JS Animation
-    Caddy.prototype.setOpacity = function() {
+    Caddi.prototype.setOpacity = function() {
         if (this.useFilter) {
             return function(opacity) {
                 this.caddiEl.filters.item('DXImageTransform.Microsoft.Alpha').Opacity = opacity * 100;
@@ -103,7 +103,7 @@ CloudFlare.define("caddi", ["caddi/config"], function(_config) {
         }
     }
 
-    Caddy.prototype.jsAnimateOpacity = function(level) {
+    Caddi.prototype.jsAnimateOpacity = function(level) {
         var interval;
         var opacity;
         this.animate_status = level;
@@ -140,7 +140,7 @@ CloudFlare.define("caddi", ["caddi/config"], function(_config) {
         }
     },
 
-    Caddy.prototype.end = function () {
+    Caddi.prototype.end = function () {
         setTimeout(function(self) {
             self.caddiEl.className = "caddi";
             self.caddiEl.innerHTML = "";
@@ -149,14 +149,14 @@ CloudFlare.define("caddi", ["caddi/config"], function(_config) {
         }, 500,this);
     }
 
-    Caddy.prototype.createCookie = function(value) {
+    Caddi.prototype.createCookie = function(value) {
         var exdate = new Date();
         exdate.setDate(exdate.getDate() + 1);
         var c_value = escape(value) + "; expires=" + exdate.toUTCString();
         document.cookie = this.cookie + "=" + c_value + "; path=/";
     }
 
-    Caddy.prototype.readCookie = function (name) {
+    Caddi.prototype.readCookie = function (name) {
         var nameEQ = this.cookie + "=";
         var ca = document.cookie.split(';');
         for (var i = 0; i < ca.length; i++) {
@@ -167,7 +167,7 @@ CloudFlare.define("caddi", ["caddi/config"], function(_config) {
         return null;
     }
 
-    Caddy.prototype.murmurhash3_32_gc = function(key, seed) {
+    Caddi.prototype.murmurhash3_32_gc = function(key, seed) {
         var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
 
         remainder = key.length & 3; // key.length % 4

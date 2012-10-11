@@ -1,4 +1,4 @@
-#Trumpet
+#Caddi
 
 This app puts a dynamic advertisement on your web pages
 
