@@ -3,7 +3,7 @@
 // View on GitHub: https://github.com/
 // CloudFlare.define("caddi", ["caddi/config"], function(_config) {
 
-CloudFlare.define( 'caddi', [ 'cloudflare/dom', 'cloudflare/user', 'caddi/config' ], function( version, user, config )
+CloudFlare.define( 'caddi', [ 'cloudflare/dom', 'cloudflare/user', 'cfapp-caddi/config' ], function( version, user, config )
 {
     var version    = version.internetExplorer;
     var maxVersion = parseInt( config.ie ) || 7;
@@ -20,7 +20,7 @@ CloudFlare.define( 'caddi', [ 'cloudflare/dom', 'cloudflare/user', 'caddi/config
     /**
      * Did user close this message already?
      */
-    if( user.getCookie( 'cfapp_abetterbrowser' ) == 1 )
+    if( user.getCookie( 'cfapp_caddi' ) == 1 )
     {
         // return true;
     }
