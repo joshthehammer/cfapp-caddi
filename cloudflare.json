@@ -2,11 +2,10 @@
     "name": "Caddy",
     "description": "This app lets you put a slider with an advertisement on your site's web pages.",
     "keywords" : [
-        "monetization",
-        "ctr",
+        "advertising",
         "ads"
         ],
-    "version": "0.1.1",
+    "version": "0.1.2",
     "contributors": [
     {
         "name" : "gregory coleman",
