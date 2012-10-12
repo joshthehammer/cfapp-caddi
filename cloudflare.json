@@ -3,9 +3,10 @@
     "description": "This app lets you put a slider with an advertisement on your site's web pages.",
     "keywords" : [
         "advertising",
+        "goodtimes",
         "ads"
         ],
-    "version": "0.1.6",
+    "version": "0.1.7",
     "category":"advertising",
     "contributors": [
     {
