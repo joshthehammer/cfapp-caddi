@@ -1,8 +1,12 @@
 
 CloudFlare.define( 'caddi', [ 'cfapp-caddi/config' ], function(o) {
-    console.log( "inside caddi", o );
 
-    // config supports adtypes txt AND/OR video?  
+    // console.log( "inside caddi", o );
+
+    var section_id  = '3628055';// default: static+video  
+    if ( o && o.text_only ){ 
+        section_id = '3628054';    
+    }
 
     // Close button text
     var _CLOSE =          ' X ',
@@ -12,7 +16,7 @@ CloudFlare.define( 'caddi', [ 'cfapp-caddi/config' ], function(o) {
 
         // Ad HTML Code to be injected
         _ADHTML =               
-        '<!-- BEGIN STANDARD TAG - 300 x 250 - CloudFlare Publisher Network: CloudFare Network 300x250 Slider - Static + Video - DO NOT MODIFY --><IFRAME FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=300 HEIGHT=250 SRC="//ad.yieldmanager.com/st?ad_type=iframe&ad_size=300x250&section=3628055&pub_url=' + escape(location.href)  + '"></IFRAME><!-- END TAG -->';
+        '<!-- BEGIN STANDARD TAG - 300 x 250 - CloudFlare Publisher Network: CloudFare Network 300x250 Slider - Static + Video - DO NOT MODIFY --><IFRAME FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=300 HEIGHT=250 SRC="//ad.yieldmanager.com/st?ad_type=iframe&ad_size=300x250&section=' + section_id + '&pub_url=' + escape(location.href)  + '"></IFRAME><!-- END TAG -->';
 
     // DO NOT MODIFY BELOW THIS POINT
     var d1 = document.createElement('div');
