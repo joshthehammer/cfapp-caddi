@@ -6,7 +6,7 @@ CADDI can be used to:
 
 * Make money!
 
-![Screenshot of cadi](/images/apps/trumpet/caddi_screenshot.png "Screenshot")
+![Screenshot of cadi](/images/apps/caddi/caddi_screenshot.png "Screenshot")
 
 For comments or support please contact me by <a href="mailto:gleeco@cloudflare.com">email</a> or <a href="http://twitter.com/gleecology">Twitter</a>.
 

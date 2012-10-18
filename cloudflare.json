@@ -6,7 +6,7 @@
         "goodtimes",
         "ads"
         ],
-    "version": "0.1.9",
+    "version": "0.2.0",
     "category":"advertising",
     "contributors": [
     {
@@ -32,8 +32,8 @@
         "config" : {
             "assets" : {
                 "logos" : {
-                    "200px": "./public/images/caddi_logo-200.png",
-                    "132px": "./public/images/caddi_logo-132.png"
+                    "200px": "./public/images/caddi_200.png",
+                    "132px": "./public/images/caddi_132.png"
                 },
                 "detail_page" : [
                     "./public/images/caddi_screenshot.png"
