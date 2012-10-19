@@ -6,52 +6,63 @@
         "goodtimes",
         "ads"
         ],
-    "version": "0.2.2",
+    "version": "0.2.3",
     "category":"advertising",
     "contributors": [
-    {
-        "name" : "greg lee coleman",
-        "email" : "gleeco@cloudflare.com"
-    }
-    ],
-        "repository" : {
-            "type" : "git",
-            "url" : "https://github.com/gleecology/cfapp-caddi.git"
-        },
-        "main" : "./public/javascripts/caddi.js",
-        "dependencies" : {
-        },
-        "licenses" : [
         {
-            "type": "MIT",
-            "url": "http://www.opensource.org/licenses/MIT"
-		}],
-        "implements" : "AMD",
-        "scripts" : {
-        },
-        "config" : {
-            "assets" : {
-                "logos" : {
-                    "200px": "./public/images/caddi_200.png",
-                    "132px": "./public/images/caddi_132.png"
-                },
-                "detail_page" : [
-                    "./public/images/caddi_screenshot.png"
-                ]
-            },
-            "payment": {},
-            "details": {
-               "Category": "advertising",
-               "Language": "English",
-               "Restrictions": "Some"
-           },
-            "interface": [
-            {
-                "id": "message",
-                "name": "Display slider ad text",
-                "description": "The text you would like displayed on your site. Leave blank to disable.",
-                "type": "string"
-            }
-            ]
+            "name" : "greg lee coleman",
+            "email" : "gleeco@cloudflare.com"
         }
+    ],
+    "repository" : {
+        "type" : "git",
+        "url" : "https://github.com/gleecology/cfapp-caddi.git"
+    },
+    "main" : "./public/javascripts/caddi.js",
+    "dependencies" : {
+    },
+    "licenses" : [
+    {
+        "type": "MIT",
+        "url": "http://www.opensource.org/licenses/MIT"
+    }],
+    "implements" : "AMD",
+    "scripts" : {
+    },
+    "config" : {
+        "assets" : {
+            "logos" : {
+                "200px": "./public/images/caddi_200.png",
+                "132px": "./public/images/caddi_132.png"
+            },
+            "detail_page" : [
+                "./public/images/caddi_screenshot.png"
+            ]
+        },
+        "payment": {},
+        "details": {
+           "Category": "advertising",
+           "Language": "English",
+           "Restrictions": "Some"
+       },
+       "interface": [
+          {
+            "id": "text_only",
+            "name": "Ad format",
+            "description" : "Which ad formats to display",
+            "type": "select",
+            "options": [
+                { 
+                    "label": "Text and Video",
+                    "value": 0,
+                    "selected": true
+                },
+                { 
+                    "label": "Text only",
+                    "value": 1
+                }
+            ] 
+          }
+        ]
+    }
 }

@@ -1,7 +1,7 @@
 
 CloudFlare.define( 'caddi', [ 'cfapp-caddi/config', 'cloudflare/owl' ], function(cfg, owl) {
 
-    // console.log( "inside caddi", O );
+    // console.log( "inside caddi", owl );
 
     var section_id  = '3628055';// default: static+video  
     if ( cfg && cfg.text_only ){ 
@@ -15,8 +15,8 @@ CloudFlare.define( 'caddi', [ 'cfapp-caddi/config', 'cloudflare/owl' ], function
          + 'bottom: -27px; '
          + 'color: #404040; '
          + 'font-weight: bold; '
-         + 'font-size: 13px; '
-         + 'padding: 0px 5px 0.5px 4px; '
+         + 'font: 16px Helvetica,Arial,Sans-serif; '
+         + 'padding: 0px 5px 0.6px 4px; '
          + 'text-decoration:none; '
          + 'border-bottom: 1px solid #404040; ' 
          + 'border-left: 1px solid #404040; ' 
