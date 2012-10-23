@@ -12,7 +12,7 @@ CloudFlare.define( 'caddi', [ 'cfapp-caddi/config', 'cloudflare/owl' ], function
 
     var Cxx = function(){ 
         return 'background-color: white; '
-         + 'bottom: -27px; '
+         + 'margin-top: -1px; '
          + 'color: #404040; '
          + 'font-weight: bold; '
          + 'font: 16px Helvetica,Arial,Sans-serif; '
