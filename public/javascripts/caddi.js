@@ -1,5 +1,5 @@
 
-CloudFlare.define( 'caddi', [ 'cfapp-caddi/config', 'cloudflare/owl' ], function(cfg, owl) {
+CloudFlare.define( 'caddi', [ 'caddi/config', 'cloudflare/owl' ], function(cfg, owl) {
 
     // console.log( "inside caddi", owl );
 
@@ -24,7 +24,6 @@ CloudFlare.define( 'caddi', [ 'cfapp-caddi/config', 'cloudflare/owl' ], function
          + 'position: absolute; '
          + 'display: block;  '
     }
-
 
     // Close button text
     var _CLOSE =          'x',
