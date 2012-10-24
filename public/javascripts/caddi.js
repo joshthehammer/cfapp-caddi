@@ -1,14 +1,15 @@
 
-CloudFlare.define( 'caddi', [ 'caddi/config', 'cloudflare/owl' ], function(cfg, owl) {
+// CloudFlare.define( 'caddi', [ 'caddi/config', 'cloudflare/owl' ], function(cfg, owl) {
+CloudFlare.define( 'caddi', [ 'caddi/config',  ], function(cfg) {
 
-    // console.log( "inside caddi", owl );
+    console.log( "inside caddi", cfg );
 
     var section_id  = '3628055';// default: static+video  
     if ( cfg && cfg.text_only ){ 
         section_id = '3628054';    
     }
 
-    var cfOwl           = owl.createDispatcher('caddi');
+    // var cfOwl           = owl.createDispatcher('caddi');
 
     var Cxx = function(){ 
         return 'background-color: white; '
@@ -64,10 +65,7 @@ CloudFlare.define( 'caddi', [ 'caddi/config', 'cloudflare/owl' ], function(cfg, 
 
     a1.onclick = function() {
         d1.parentNode.removeChild(d1);
-        cfOwl.dispatch( { 
-            action:     'click',
-            type:       'close'
-        });
+        // cfOwl.dispatch( { action:  'click', type: 'close' });
         return false;
     }
  
@@ -87,9 +85,7 @@ CloudFlare.define( 'caddi', [ 'caddi/config', 'cloudflare/owl' ], function(cfg, 
             d2.style.right = '0px';
             a1.style.display = 'block';
         }
-        cfOwl.dispatch( { 
-            action:     'load',
-        });
+        // cfOwl.dispatch( {action: 'load'});
  
     }), _DELAY);
     document.getElementsByTagName('body')[0].appendChild(d1);
