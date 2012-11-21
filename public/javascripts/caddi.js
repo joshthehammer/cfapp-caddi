@@ -7,33 +7,31 @@
     [x] waypoints working
     [x] rate limit via cookie
     [x] R/L position via config
+    [] OWL sends data correctly
+    [] OWL data format
 **/
 
 CloudFlare.define( 'caddi', 
     [       'caddi/config', 'cloudflare/dom',   'cloudflare/user',  'cloudflare/owl',   'cloudflare/jquery1.7' ], 
     function(cfg,           dom,                user,               owl,                jQuery ) {
 
-
-    // console.log( "inside caddi owl arg", owl );
-    // console.log( "inside caddi jQuery arg", jQuery, window.jQuery, $ );
-
     var section_id  = '3628055';    // default: static+video  
 
     if ( cfg && cfg.text_only ){ 
-        section_id = '3628054';    
+        section_id = '3628054';    // static only
     }
-
-
+    
     var cookie          =  'cfapp_caddi'+section_id,
-        view_max        = ( cfg.view_max_ct || 3 ),
+        view_max        = ( cfg.view_max_ct || 0 ),
         view_ttl        = ( cfg.view_ttl_days || 1 ),
         view_ct         = ( user.getCookie( cookie ) || 0 );
 
     console.log( "config -- ", cfg );
-    console.log( 'cookie = ' + cookie, ' view count=', view_ct );
+    // console.log( 'cookie = ' + cookie, ' view count=', view_ct );
 
     if( view_max && view_ct >= view_max ) {
         console.log( 'view_count over max' );
+        window.alert( 'view_count over max / ' + view_ct );
         return true;
     }else{
         ++view_ct;
@@ -51,97 +49,120 @@ CloudFlare.define( 'caddi',
 
 
 
-    console.log( "waypoints settings ", $.waypoints.settings );
+    // console.log( "waypoints settings ", $.waypoints.settings );
 
     var cfOwl           = owl.createDispatcher('caddi');
 
-    var isLeft          = ( Math.floor((Math.random()*10)+1) < 6 ) ? true : false;
 
     console.log( "owl dispatcher:", cfOwl );
 
+    var isLeft      = ( Math.floor((Math.random()*10)+1) < 6 ) ? true : false,
+        // isLeft      = true,
+        orient      = isLeft ? 'left' : 'right';
+
      var a = 'cfad',
-            ar = '#'+a,
-            b   = a + 'b',
-            br  = '#'+b,
-            x   = a + 'x',
-            xr  = '#'+x,
-            tx  = 1000,
-            f   = '<IFRAME style="border: 1px solid #404040; padding: 3px; background-color: white;" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=300 HEIGHT=250 SRC="//ad.yieldmanager.com/st?ad_type=iframe&ad_size=300x250&section=' + section_id + '&pub_url=' + escape(location.href)  + '"></IFRAME>',
-            css = isLeft 
-                ? 
-                ( 
-               ar + ' { display: none; height: 300px; overflow: hidden; position: absosulte; width: 320px; left: 0; top: 150px; z-index: 4; }' + 
-               br + ' { background-color: #ffffff; height: 250px; width:320px; margin-bottom: 25px; padding: 2px; left : 0; position: absolute; top: 10px; }' + 
-               xr + ' { background-color: #ffffff; margin-top: -1px; color: #404040; font-weight: bold; font: 16px Helvetica,Arial,Sans-serif; padding: 0px 5px 0.6px 4px; text-decoration: none; border-bottom: 1px solid #404040; border-right: 1px solid #404040; left : 0; position: absolute; display: block; }' 
-                )
-                : 
-                ( 
-               ar + ' { display: none; height: 300px; overflow: hidden; position: absosulte; width: 320px; right: 0; top: 150px; z-index: 4; }' + 
-               br + ' { background-color: #ffffff; height: 250px; margin-bottom: 25px; padding: 2px; right: -320px; position: absolute; top: 10px; }' + 
-               xr + ' { background-color: #ffffff; margin-top: -1px; color: #404040; font-weight: bold; font: 16px Helvetica,Arial,Sans-serif; padding: 0px 5px 0.6px 4px; text-decoration: none; border-bottom: 1px solid #404040; border-left: 1px solid #404040; right: 0; position: absolute; display: block; }'
-                );
+        ar = '#'+a,
+        b   = a + 'b',
+        br  = '#'+b,
+        x   = a + 'x',
+        xr  = '#'+x,
+        f   = a + 'f',
+        fr  = '#'+f,
+        tx  = 1000,
+        iframe  = '<iframe id="'+f+'" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=300 HEIGHT=250 SRC="//ad.yieldmanager.com/st?ad_type=iframe&ad_size=300x250&section=' + section_id + '&pub_url=' + escape(location.href)  + '"></IFRAME>',
+        css = isLeft 
+            ?  ( 
+               ar + ' { display: none; height: 300px; overflow: hidden; position: absosulte; width: 320px; left: 0; top: 150px; z-index: 4; } ' + 
+               br + ' { background-color: #ffffff; height: 250px; width:320px; margin-bottom: 25px; padding: 2px; left : -320px; position: absolute; top: 10px; } ' + 
+               // animate: br + ' { background-color: #ffffff; height: 250px; width:320px; margin-bottom: 25px; padding: 2px; left : 0px; position: absolute; top: 10px; } ' + 
+               fr + ' { height: 250px; width: 300px; margin: 0px; padding: 3px; background-color: #ffffff; border: 1px solid #404040; border-left: 0px } ' + 
+               xr + ' { background-color: #ffffff; margin-top: -1px; color: #404040; font-weight: bold; font: 16px Helvetica,Arial,Sans-serif; padding: 0px 5px 0.6px 4px; text-decoration: none; border-bottom: 1px solid #404040; border-right: 1px solid #404040; left : 0; position: absolute; display: block; } ' 
+               )
+            :  ( 
+               ar + ' { display: none; height: 300px; overflow: hidden; position: absosulte; width: 320px; right: 0; top: 150px; z-index: 4; } ' + 
+               br + ' { background-color: #ffffff; height: 250px; margin-bottom: 25px; padding: 2px; right: -320px; position: absolute; top: 10px; } ' + 
+               // animate: br + ' { background-color: #ffffff; height: 250px; margin-bottom: 25px; padding: 2px; right: 0px; position: absolute; top: 10px; } ' + 
+               fr + ' { height: 250px; width: 300px; margin: 0px; padding: 3px; background-color: #ffffff; border: 1px solid #404040; border-right: 0px } ' + 
+               xr + ' { background-color: #ffffff; margin-top: -1px; color: #404040; font-weight: bold; font: 16px Helvetica,Arial,Sans-serif; padding: 0px 5px 0.6px 4px; text-decoration: none; border-bottom: 1px solid #404040; border-left: 1px solid #404040; right: 0; position: absolute; display: block; } '
+               );
 
 
     console.log( "vars were set: ar=" + ar + ' br='+ br + ' xr=' + xr + ' isLeft=' + isLeft );
 
-        $('head').append(  '<style type="text/css">' + css + '</style>' );
-    console.log( "css appended ");
+    $('head').append(  '<style type="text/css">' + css + '</style>' );
 
-        // $('<div id="'+a+'"></div>').appendTo('body');
-        $('<div/>').attr('id', a).appendTo('body');
-    console.log( "a was appended ");
+    $('<div/>').attr('id', a).appendTo('body');
 
-        // $('<div id="'+b+'">'+f+'</div>').appendTo(ar);
-        $('<div/>').attr('id', b).html(f).appendTo(ar);
-    console.log( "b was appended ");
+    $('<div/>').attr('id', b).html(iframe).appendTo(ar);
 
-        $('<a href="#">x</a>').attr('id',x).appendTo(br);
-    console.log( "x was appended ");
+    $('<a href="#">x</a>').attr('id',x).appendTo(br);
+
+    $(xr).click(function(){ 
+        $(ar).remove();
+        // cfOwl.dispatch( {action: 'close'});
+    });
+
+    $(ar).css('display', 'block');
+    $(br).css('display', 'block');
+    
+
+    console.log( "classes were added orient= " + orient  );
+
+    /** 
+
+    $(br).animate({ orient : '+=320px' }, "slow", function() { 
+        console.log( '   animate is done ' );
+        // $(br).css(orient, '0px' );
+        $(xr).css('display', 'block');
+
+    });
+
+    // jquery fadeIN
+
+    $(br).fadeIn(tx, function(){ 
+        console.log( '   fadeIn all done ' );
+        $(br).css(orient, '0px' );
+        $(ar).css('display', 'block' );
+        $(xr).css('display', 'block');
+    });
+    ****/
+
+    setTimeout((function slideIn() {
+
+        // console.log( 'inside slideIn() function orient='+orient + ' delay=' + tx );
+        $(ar).css('display', 'block' );
+        var s = parseInt( $(br).css( orient ) );
+        // console.log( '    got s=' + s );
+        if (s <= 0 ) {
+            $(br).css(orient, (s + 8) + 'px' );        // lower is slower
+            setTimeout(slideIn, 10);
+        } else {
+            console.log( '   slideIn all done ' );
+            $(br).css(orient, '0px' );
+            $(xr).css('display', 'block');
+        }
+ 
+    }), tx );
 
 
-        $(xr).click(function(){ 
-            console.log( "inside the click function... removing?" );
-            $(ar).remove();
-            // cfOwl.dispatch( {action: 'close'});
-        });
+
+    // console.log( "timeout was added" );
+    cfOwl.dispatch( {action: 'load'});
+
+    $.waypoints.settings.scrollThrottle = 50;       // default=100
+
+    $(br).waypoint( function(event, direction) {
+        // console.log( ' ..inside ads waypoint op' );
+        $(event.target).css( { 
+            'position':'fixed',
+            'top':'20',
+        } );
+        event.stopPropagation();
+    });
 
 
-        $(ar).css('display', 'block');
-
-
-    console.log( "classes were added" );
-
-        setTimeout((function iii() {
-            console.log( 'inside iii() function ' );
-            $(ar).css('display', 'block' );
-            var s = $(br).css('right');
-            if (s <= 0) {
-                $(br).css('right', (s + 6) + 'px' );
-                setTimeout(iii, 10);
-            } else {
-                $(br).css('right', '0px' );
-                $(xr).css('display', 'block');
-            }
-     
-        }), tx );
-
-    console.log( "timeout was added" );
-
-        // cfOwl.dispatch( {action: 'load'});
-
-       $.waypoints.settings.scrollThrottle = 30;
-
-        $(br).waypoint( function(event, direction) {
-            console.log( ' ..inside ads waypoint op' );
-            $(event.target).css( { 
-                'position':'fixed',
-                'top':'20',
-            } );
-            event.stopPropagation();
-        });
-
-
-    console.log( "waypoint was added to id=" + ar );
+    // console.log( "waypoint was added to id=" + ar );
+    console.log( 'caddi completed' );
 
 } );
 
