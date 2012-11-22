@@ -1,6 +1,6 @@
 
 /** 
- * TODO
+ * TODO --- 
     [x] text only vs. text+richmedia
     [x] scroll locking
     [x] jquery working
@@ -11,11 +11,159 @@
     [] OWL data format
 **/
 
+CloudFlare.define(
+    'cloudflare/owldev',
+    ['cloudflare', 'cloudflare/deferred', 'cloudflare/iterator', 'cloudflare/utility', 'cloudflare/console'],
+    function(cloudflare, deferred, iterator, utility, cfconsole) {
+
+    console.log( 'inside custom OWL module definition' );
+
+        var ping = function(namespaced) {
+
+                var query = [];
+
+                iterator.forEach(
+                    namespaced,
+                    function(data, namespace) {
+
+                        iterator.forEach(
+                            data,
+                            function(value, key) {
+
+                                query.push(encodeURIComponent(namespace) + '[' + encodeURIComponent(key) + ']=' + encodeURIComponent(value));
+                            }
+                        );
+                    }
+                );
+
+                query.push('t=' + utility.now());
+
+                new Image().src = '/cdn-cgi/ping?' + query.join('&');
+            };
+
+        var createDispatcher = function(name) {
+
+            var toData = function(key, value) {
+  // console.log( 'OWL toData() ', key, value );                  
+                    var data = typeof key == 'object' ? key : {};
+
+                    if(data !== key && value)
+                        data[key] = value;
+
+                    return data;
+                },
+
+                dispatch = (function() {
+    
+  console.log( 'OWL dispatch() invoked ' );
+                    var namespace,
+                        resolveConfig;
+
+                    return function(key, value) {
+
+  // console.log( 'OWL dispatch() inner op', key, value );
+
+                        var data = toData(key, value),
+                            namespaced;
+
+                        if(typeof namespace == 'undefined') {
+
+  console.log( '    namespace undefined, trying to resolve /config for name=' + name  );
+
+                            (resolveConfig = resolveConfig || cloudflare.require(
+                                [name + '/config'],
+                                function(config) {
+
+  // console.log( '    inside name/config resolved require ..got config?', config );
+
+                                    namespace = config.owlid;
+                                }
+                            )).then(
+
+                                function() {
+  console.log( '    starting THEN block ' );
+                                    if ( ! namespace ) { 
+                                        console.log( 'WARN - failed to create namespace via config.owlid; name=' + name );
+                                        return;
+                                    }
+                                    dispatch(data);
+                                }
+                            );
+                        } else if(namespace) {
+
+  console.log( '    got namespace' );
+                            namespaced = {};
+                            namespaced[namespace] = data;
+
+                            ping(namespaced);
+                            speak(data);
+                        }
+                    };
+                })(),
+                createQueue = function() {
+
+  console.log( 'OWL createQueue() ' );
+                    var queued = {};
+
+                    return {
+                        append: function(key, value) {
+
+                            iterator.extend(queued, toData(key, value));
+                        },
+                        dispatch: function() {
+
+                            var data = queued;
+
+                            queued = {};
+
+                            dispatch(data);
+                        }
+                    };
+                },
+                speak = function(data) {
+
+                    listeners = iterator.filter(
+                        listeners,
+                        function(listener) {
+
+                            return listener(data);
+                        }
+                    );
+                },
+                listeners = [];
+
+            return {
+                version: 4,
+                dispatch: dispatch,
+                createQueue: createQueue,
+                listen: function(listener) {
+
+                    listeners.push(listener);
+                }
+            };
+        }
+
+  console.log( 'OWL returning OBJECT' );
+        return {
+            createDispatcher: createDispatcher
+        };
+
+    }
+);
+
+
+
 CloudFlare.define( 'caddi', 
-    [       'caddi/config', 'cloudflare/dom',   'cloudflare/user',  'cloudflare/owl',   'cloudflare/jquery1.7' ], 
+    // [       'caddi/config', 'cloudflare/dom',   'cloudflare/user',  '/v1/cloudflare/owl.js',   'cloudflare/jquery1.7' ], 
+    // [       'caddi/config', 'cloudflare/dom',   'cloudflare/user',  'cloudflare/owl',   'cloudflare/jquery1.7' ], 
+    [       'caddi/config', 'cloudflare/dom',   'cloudflare/user',  'cloudflare/owldev',   'cloudflare/jquery1.7' ], 
     function(cfg,           dom,                user,               owl,                jQuery ) {
 
     var section_id  = '3628055';    // default: static+video  
+
+    cfg.text_only = true;
+
+
 
     if ( cfg && cfg.text_only ){ 
         section_id = '3628054';    // static only
@@ -27,7 +175,7 @@ CloudFlare.define( 'caddi',
         view_ct         = ( user.getCookie( cookie ) || 0 );
 
     console.log( "config -- ", cfg );
-    // console.log( 'cookie = ' + cookie, ' view count=', view_ct );
+    console.log( 'cookie = ' + cookie, ' view count=', view_ct );
 
     if( view_max && view_ct >= view_max ) {
         console.log( 'view_count over max' );
@@ -49,12 +197,12 @@ CloudFlare.define( 'caddi',
 
 
 
-    // console.log( "waypoints settings ", $.waypoints.settings );
+    console.log( "waypoints settings ", $.waypoints.settings );
+
 
     var cfOwl           = owl.createDispatcher('caddi');
+    console.log( 'owl created cfOwl' , cfOwl );
 
-
-    console.log( "owl dispatcher:", cfOwl );
 
     var isLeft      = ( Math.floor((Math.random()*10)+1) < 6 ) ? true : false,
         // isLeft      = true,
@@ -74,14 +222,14 @@ CloudFlare.define( 'caddi',
             ?  ( 
                ar + ' { display: none; height: 300px; overflow: hidden; position: absosulte; width: 320px; left: 0; top: 150px; z-index: 4; } ' + 
                br + ' { background-color: #ffffff; height: 250px; width:320px; margin-bottom: 25px; padding: 2px; left : -320px; position: absolute; top: 10px; } ' + 
-               // animate: br + ' { background-color: #ffffff; height: 250px; width:320px; margin-bottom: 25px; padding: 2px; left : 0px; position: absolute; top: 10px; } ' + 
+               // br + ' { background-color: #ffffff; height: 250px; width:320px; margin-bottom: 25px; padding: 2px; left : 0px; position: absolute; top: 10px; } ' + 
                fr + ' { height: 250px; width: 300px; margin: 0px; padding: 3px; background-color: #ffffff; border: 1px solid #404040; border-left: 0px } ' + 
                xr + ' { background-color: #ffffff; margin-top: -1px; color: #404040; font-weight: bold; font: 16px Helvetica,Arial,Sans-serif; padding: 0px 5px 0.6px 4px; text-decoration: none; border-bottom: 1px solid #404040; border-right: 1px solid #404040; left : 0; position: absolute; display: block; } ' 
                )
             :  ( 
                ar + ' { display: none; height: 300px; overflow: hidden; position: absosulte; width: 320px; right: 0; top: 150px; z-index: 4; } ' + 
                br + ' { background-color: #ffffff; height: 250px; margin-bottom: 25px; padding: 2px; right: -320px; position: absolute; top: 10px; } ' + 
-               // animate: br + ' { background-color: #ffffff; height: 250px; margin-bottom: 25px; padding: 2px; right: 0px; position: absolute; top: 10px; } ' + 
+               // br + ' { background-color: #ffffff; height: 250px; margin-bottom: 25px; padding: 2px; right: 0px; position: absolute; top: 10px; } ' + 
                fr + ' { height: 250px; width: 300px; margin: 0px; padding: 3px; background-color: #ffffff; border: 1px solid #404040; border-right: 0px } ' + 
                xr + ' { background-color: #ffffff; margin-top: -1px; color: #404040; font-weight: bold; font: 16px Helvetica,Arial,Sans-serif; padding: 0px 5px 0.6px 4px; text-decoration: none; border-bottom: 1px solid #404040; border-left: 1px solid #404040; right: 0; position: absolute; display: block; } '
                );
@@ -102,57 +250,73 @@ CloudFlare.define( 'caddi',
         // cfOwl.dispatch( {action: 'close'});
     });
 
-    $(ar).css('display', 'block');
-    $(br).css('display', 'block');
-    
 
-    console.log( "classes were added orient= " + orient  );
+    console.log( "classes were added; orient=" + orient  );
+
 
     /** 
+    // NOPE
+    $(br).show("slide", { direction: (orient === 'right') ? "left" : "left" }, 1500 );
 
-    $(br).animate({ orient : '+=320px' }, "slow", function() { 
-        console.log( '   animate is done ' );
-        // $(br).css(orient, '0px' );
-        $(xr).css('display', 'block');
+    // NOPE
+    $(br).animate( { marginLeft: parseInt( $(br).css('marginLeft'),10) == 0 ?  $(br).outerWidth() : 0 } );
 
-    });
+    // NOPE
+    $(br).animate({ orient : '+=320px' }, "slow", function() { $(xr).css('display', 'block'); });
 
-    // jquery fadeIN
-
+    // NOPE
     $(br).fadeIn(tx, function(){ 
         console.log( '   fadeIn all done ' );
         $(br).css(orient, '0px' );
         $(ar).css('display', 'block' );
         $(xr).css('display', 'block');
     });
-    ****/
+    **/
+
+    // $(ar).css('display', 'block');
+
+
 
     setTimeout((function slideIn() {
-
-        // console.log( 'inside slideIn() function orient='+orient + ' delay=' + tx );
+        console.log( 'inside slideIn() function orient='+orient + ' delay=' + tx );
         $(ar).css('display', 'block' );
         var s = parseInt( $(br).css( orient ) );
-        // console.log( '    got s=' + s );
+        console.log( '    got s=' + s );
         if (s <= 0 ) {
             $(br).css(orient, (s + 8) + 'px' );        // lower is slower
             setTimeout(slideIn, 10);
         } else {
-            console.log( '   slideIn all done ' );
             $(br).css(orient, '0px' );
             $(xr).css('display', 'block');
+
+            /** 
+            var queue = cfOwl.createQueue();
+            queue.append({
+                    ape: null,
+                    action: 'load',
+                    type: 'caddi'
+            });
+            queue.append('{ape:null,action:"load",type:"caddi" }');
+            queue.dispatch();
+            **/
+            cfOwl.dispatch( {
+                ape: null,
+                action: 'load',
+                type: 'caddi'
+            });
+            console.log( '   slideIn all done --queue', cfOwl );
         }
- 
     }), tx );
 
 
+    console.log( "timeout was added" );
 
-    // console.log( "timeout was added" );
-    cfOwl.dispatch( {action: 'load'});
+    // cfOwl.dispatch( {action: 'load'});
 
     $.waypoints.settings.scrollThrottle = 50;       // default=100
 
     $(br).waypoint( function(event, direction) {
-        // console.log( ' ..inside ads waypoint op' );
+        console.log( ' ..inside ads waypoint op' );
         $(event.target).css( { 
             'position':'fixed',
             'top':'20',
@@ -161,7 +325,7 @@ CloudFlare.define( 'caddi',
     });
 
 
-    // console.log( "waypoint was added to id=" + ar );
+    console.log( "waypoint was added to id=" + ar );
     console.log( 'caddi completed' );
 
 } );
