@@ -1,18 +1,5 @@
 
 
-/** 
- * TODO --- 
-    [x] text only vs. text+richmedia
-    [x] scroll locking
-    [x] jquery working
-    [x] waypoints working
-    [x] rate limit via cookie
-    [x] R/L position via config
-    [X] OWL sends data correctly
-    [] OWL data format
-    [] R/L bottom anchored options
-**/
-
 CloudFlare.define( 'caddi', 
     [       'caddi/config', 'cloudflare/dom',   'cloudflare/user',  'cloudflare/owldev',   'cloudflare/jquery1.7' ], 
     function(cfg,           dom,                user,               owl,                jQuery ) {
@@ -100,6 +87,10 @@ CloudFlare.define( 'caddi',
     cookie.N++;
     cookie.sessionCt || ( cookie.sessionCt++ );
 
+
+    if (dom.ios || dom.android ){
+        terminate++;
+    }
 
     if(  minRes && viewport ) {
         ( minRes[0] && viewport.width ) && ( minRes[0] <= viewport.width || terminate++ );
