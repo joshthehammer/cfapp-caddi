@@ -6,7 +6,7 @@
         "goodtimes",
         "ads"
         ],
-    "version": "0.2.7",
+    "version": "0.2.8",
     "category":"advertising",
     "contributors": [
         {
@@ -45,8 +45,8 @@
            "Language": "English",
            "Restrictions": "Some"
        },
-
        "interface": [
+
           {
             "id": "ss_view_max_ct",
             "name": "Impressions Per Session",
@@ -88,7 +88,7 @@
           },
             
           {
-            "id": "sticky",
+            "id": "scroll",
             "name": "Sticky Scroll",
             "description" : "Ad scrolls with page",
             "type": "select",
@@ -98,6 +98,18 @@
             ]
           },
 
+            
+          {
+            "id": "min_resolution",
+            "name": "Minimum resolution",
+            "description" : "Ad scrolls with page",
+            "type": "select",
+            "options": [
+                { "value": 0,           "label": "All resolutions",  "selected": "true" },
+                { "value": "1024x0",    "label": "Greater than 1024 x Height" },
+                { "value": "1600x0",    "label": "Greater than 1600 x Height" }
+            ]
+          },
 
           {
             "id": "orient",
@@ -105,8 +117,10 @@
             "description" : "Which side of page ad appears on",
             "type": "select",
             "options": [
-                { "value": 'left',       "label": "Left" },
-                { "value": 'right',       "label": "Right",    "selected": "true" }
+                { "value": "right",         "label": "Right",    "selected": "true" },
+                { "value": "left",          "label": "Left"             },
+                { "value": "left_bottom",   "label": "Left Bottom"      },
+                { "value": "right_bottom",  "label": "Right Bottom"     }
             ]
           },
 
