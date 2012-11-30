@@ -6,7 +6,7 @@
         "goodtimes",
         "ads"
         ],
-    "version": "0.3.0",
+    "version": "0.3.1",
     "category":"advertising",
     "contributors": [
         {
@@ -103,12 +103,12 @@
           {
             "id": "min_resolution",
             "name": "Minimum resolution",
-            "description" : "Ad scrolls with page",
+            "description" : "Only show ads in browsers based on window size",
             "type": "select",
             "options": [
                 { "value": 0,           "label": "All resolutions",  "selected": "true" },
-                { "value": "1024x0",    "label": "Greater than 1024 x Height" },
-                { "value": "1600x0",    "label": "Greater than 1600 x Height" }
+                { "value": "1024x0",    "label": "wider than 1024" },
+                { "value": "1600x0",    "label": "wider than 1600" }
             ]
           },
 

@@ -85,10 +85,8 @@ CloudFlare.define( 'caddi',
     D  &&  console.log( "caddi starts with cfg", cfg );
 
     cookie.N++;
-    cookie.sessionCt || ( cookie.sessionCt++ );
 
-
-    if (dom.ios || dom.android ){
+    if (dom.ios || dom.android ){ 
         terminate++;
     }
 
@@ -114,6 +112,7 @@ CloudFlare.define( 'caddi',
         cookie.sessionViewCt    = 0;
     }
    
+
     if ( cfg.ss_view_max_ct && cookie.sessionViewCt >= cfg.ss_view_max_ct){
         terminate++;
     }else{
@@ -146,12 +145,12 @@ CloudFlare.define( 'caddi',
         iframe  = '<iframe id="'+f+'" FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=300 HEIGHT=250 SRC="//ad.yieldmanager.com/st?ad_type=iframe&ad_size=300x250&section=' 
                 + section_id + '&pub_url=' + escape(location.href)  + '"></IFRAME>',
         css = 
-                ' #cfad  { background-color: #ffffff; height: 260px; width:0px; margin-bottom: 25px; padding: 2px 0; position: fixed; z-index: 99999} ' + 
+                ' #cfad  { background-color: #ffffff; height: 280px; width:0px; margin-bottom: 25px; padding: 2px 0; position: fixed; z-index: 99999; overflow: hidden; } ' + 
                 ' #cfadf { height: 250px; width: 300px; margin: 0px; padding: 3px; background-color: #ffffff; border: 1px solid #404040;  } ' +
-                ' #cfadx { background-color: #ffffff; margin-top: -1px; color: #404040; font-weight: bold; font: 16px Helvetica,Arial,Sans-serif; padding: 0px 5px 0.6px 4px; text-decoration: none; border-bottom: 1px solid #404040; border-left: 1px solid #404040; position: absolute; display: block; } ' + 
+                ' #cfadx { background-color: #ffffff; margin-top: -1px; color: #404040; font-weight: bold; font: 16px Helvetica,Arial,Sans-serif; padding: 0px 5px 0.6px 4px; text-decoration: none; border: 0; border-bottom:  1px solid #404040; position: absolute; display: block; } ' + 
                 ' .cfad-l { left: 0px; } .cfad-r { right: 0px; text-align:right}  ' + 
                 ' .cfadf-l { border-left: 0px ! important; } .cfadf-r { border-right:0px ! important; } ' + 
-                ' .cfadx-l { border-right: 1px solid #404040; left : 0; } .cfadx-r { border-left:  1px solid #404040; right: 0; } ' + 
+                ' .cfadx-l { border-right: 1px solid #404040 ! important; left : 0 ! important; } .cfadx-r { border-left:  1px solid #404040 ! important; right: 0 ! important; } ' + 
                 ' .cfad-y-bot { bottom: 15px; } ' + 
                 ' .cfad-y-top { top: 15px; } ' ; 
 
@@ -168,17 +167,51 @@ CloudFlare.define( 'caddi',
 
     if ( ! isBottom && ! cfg.scroll )  $(ar).css('position', 'relative');
 
-    $(xr).click(function(){ 
-        if ( cfg.user_pause_ttl ){
-            D  &&  console.log( 'adding user_pause_ttl = ' + cfg.user_pause_ttl );
-            cookie.pauseUntil = currTime + cfg.user_pause_ttl; 
-            writeCookie(cookieName,cookie);
-        }
-        $(ar).remove();
-        cfOwl.dispatch( {action: 'close', orient: orient });
-    });
+    var fooClick = function() {  console.log( 'doing some Foo!' ) };
 
-    $(ar).animate( { width: '320px' }, tx );
+    var removeOp = function(){ 
+            if ( cfg.user_pause_ttl ){
+                D  &&  console.log( 'adding user_pause_ttl = ' + cfg.user_pause_ttl );
+                cookie.pauseUntil = currTime + cfg.user_pause_ttl; 
+                writeCookie(cookieName,cookie);
+            }
+            $(ar).remove();
+            cfOwl.dispatch( {action: 'close', orient: orient });
+        },
+        maximizeOp = function(){
+            $(ar).animate( { width: '320px' } , 'slow', function() { 
+                $(xr).html('x');
+                $(xr).unbind('click').click( removeOp );
+            });
+        };
+
+    $(xr).click( removeOp );
+
+
+    /** 
+     * setTimeout flow
+     *   after N seconds, animate to reduce to gutter, eg. 4px;
+     *   attatch listener for hover that fires re-animate to full size
+     *
+     */
+
+    $(ar).delay(1600).animate( { width: '320px' }, tx )
+
+    var timeoutId = null;
+    window.setTimeout( function(){  
+        D  &&  console.log( 'starting timeout function to rollback ad' );
+
+        if (!  $(ar).length ) { 
+            window.clearTimeout(timeoutID);  // element has been removed via close click
+            return;
+        }
+        $(ar).animate( { width: '18px' } , 'slow', function(){ 
+            D  &&  console.log( 'installing alternate click handler....' );
+            $(xr).html('>');
+            $(xr).unbind('click').click( maximizeOp );
+        });
+    }, 6000 );
+
 
     cfOwl.dispatch( { action: 'load', orient: orient, });
 
