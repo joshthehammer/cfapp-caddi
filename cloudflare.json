@@ -6,7 +6,7 @@
         "goodtimes",
         "ads"
         ],
-    "version": "0.2.8",
+    "version": "0.2.9",
     "category":"advertising",
     "contributors": [
         {
@@ -58,11 +58,11 @@
                     "selected": true,
                     "value": 0
                 },
-                { "value": 20   },
-                { "value": 10   },
-                { "value": 5    },
-                { "value": 3    },
-                { "value": 1    }
+                { "value": 50,  "label": "50 impressions"  },
+                { "value": 25,  "label": "25 impressions"  },
+                { "value": 10,  "label": "10 impressions"  },
+                { "value": 5,   "label": "5 impressions"   },
+                { "value": 1,   "label": "1 impressions"   }
             ] 
           },
 
@@ -77,13 +77,14 @@
                     "selected": true,
                     "value": 0
                 },
+                { "value": 60,      "label": "1 minute" },
                 { "value": 360,     "label": "10 minutes" },
                 { "value": 3600,    "label": "1 hour" },
                 { "value": 14400,   "label": "4 hours" },
                 { "value": 43200,   "label": "12 hours" },
                 { "value": 86400,   "label": "24 hours" },
                 { "value": 259200,  "label": "72 hours" },
-                { "value": 315360000, "label": "Never show again (for the life of user cookie)" }
+                { "value": 315360000, "label": "Never show again" }
             ] 
           },
             
